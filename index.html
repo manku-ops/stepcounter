@@ -1,47 +1,77 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step Counter</title>
+</head>
+<body style="text-align:center; font-family:Arial; margin-top:50px;">
 
-<body>
-
-    <h1>My Step Counter</h1>
-    <p>Steps: <b id="stepDisplay">0</b></p>
+    <h1>🚶 Step Counter</h1>
+    <h2>Steps: <span id="stepDisplay">0</span></h2>
 
     <button onclick="start()">Start Tracking</button>
 
     <script>
-        var steps = 0;
-        var threshold = 12; // How hard the "shake" needs to be
-        var canStep = true; // Prevents counting one step 100 times
+        let steps = 0;
+        let lastMovement = 0;
+        let threshold = 3;   // 🔥 MUCH LOWER = better detection
+        let canStep = true;
 
         function start() {
-            // Ask for permission (needed for iPhones)
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission();
+
+            alert("Sensor started! Move your phone.");
+
+            // iPhone permission (safe for Android too)
+            if (typeof DeviceMotionEvent !== "undefined" &&
+                typeof DeviceMotionEvent.requestPermission === "function") {
+
+                DeviceMotionEvent.requestPermission()
+                .then(response => {
+                    if (response === "granted") {
+                        initSensor();
+                    } else {
+                        alert("Permission denied");
+                    }
+                })
+                .catch(console.error);
+
+            } else {
+                // Android
+                initSensor();
             }
+        }
+
+        function initSensor() {
 
             window.addEventListener("devicemotion", function(event) {
-                var x = event.accelerationIncludingGravity.x;
-                var y = event.accelerationIncludingGravity.y;
-                var z = event.accelerationIncludingGravity.z;
 
-                // Simple math to see how much the phone moved
-                var movement = Math.sqrt(x * x + y * y + z * z);
+                let acc = event.accelerationIncludingGravity;
+                if (!acc) return;
 
-                // If movement is high, count a step
-                if (movement > threshold && canStep == true) {
-                    steps = steps + 1;
-                    document.getElementById("stepDisplay").innerHTML = steps;
+                let x = acc.x || 0;
+                let y = acc.y || 0;
+                let z = acc.z || 0;
 
-                    // Pause for a split second so it doesn't double-count
+                let movement = Math.sqrt(x*x + y*y + z*z);
+
+                let diff = Math.abs(movement - lastMovement);
+
+                // Detect step
+                if (diff > threshold && canStep) {
+                    steps++;
+                    document.getElementById("stepDisplay").innerText = steps;
+
                     canStep = false;
-                    setTimeout(function() {
+
+                    setTimeout(() => {
                         canStep = true;
                     }, 300);
                 }
+
+                lastMovement = movement;
             });
         }
     </script>
 
 </body>
-
 </html>

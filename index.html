@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>My Step Counter</h1>
+    <p>Steps: <b id="stepDisplay">0</b></p>
+
+    <button onclick="start()">Start Tracking</button>
+
+    <script>
+        var steps = 0;
+        var threshold = 12; // How hard the "shake" needs to be
+        var canStep = true; // Prevents counting one step 100 times
+
+        function start() {
+            // Ask for permission (needed for iPhones)
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission();
+            }
+
+            window.addEventListener("devicemotion", function(event) {
+                var x = event.accelerationIncludingGravity.x;
+                var y = event.accelerationIncludingGravity.y;
+                var z = event.accelerationIncludingGravity.z;
+
+                // Simple math to see how much the phone moved
+                var movement = Math.sqrt(x * x + y * y + z * z);
+
+                // If movement is high, count a step
+                if (movement > threshold && canStep == true) {
+                    steps = steps + 1;
+                    document.getElementById("stepDisplay").innerHTML = steps;
+
+                    // Pause for a split second so it doesn't double-count
+                    canStep = false;
+                    setTimeout(function() {
+                        canStep = true;
+                    }, 300);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

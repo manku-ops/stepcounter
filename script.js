@@ -64,7 +64,23 @@ function updateStats() {
     let calories = (steps * caloriesPerStep).toFixed(2);
     document.getElementById("calories").innerText = calories + " kcal";
 }
+function updateStats() {
+    document.getElementById("steps").innerText = steps;
 
+    let distance = (steps * stepLength).toFixed(2);
+    document.getElementById("distance").innerText = distance + " m";
+
+    let calories = (steps * caloriesPerStep).toFixed(2);
+    document.getElementById("calories").innerText = calories + " kcal";
+
+    // 🎯 Progress ring (goal = 5000 steps)
+    let goal = 5000;
+    let progress = Math.min(steps / goal, 1);
+    let degrees = progress * 360;
+
+    document.querySelector(".ring").style.background =
+        `conic-gradient(#00e676 ${degrees}deg, #1e293b ${degrees}deg)`;
+}
 function reset() {
     steps = 0;
     lastMovement = 0;

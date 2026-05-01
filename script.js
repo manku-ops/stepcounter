@@ -55,15 +55,7 @@ function initSensor() {
     });
 }
 
-function updateStats() {
-    document.getElementById("steps").innerText = steps;
 
-    let distance = (steps * stepLength).toFixed(2);
-    document.getElementById("distance").innerText = distance + " m";
-
-    let calories = (steps * caloriesPerStep).toFixed(2);
-    document.getElementById("calories").innerText = calories + " kcal";
-}
 function updateStats() {
     document.getElementById("steps").innerText = steps;
 

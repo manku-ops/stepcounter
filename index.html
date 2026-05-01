@@ -11,19 +11,32 @@
 <body>
 
 <div class="container">
-    <h1>🚶 Step Counter</h1>
 
-    <div class="stat" id="steps">0</div>
-    <div class="label">Steps</div>
+    <h1>Fitness Tracker</h1>
 
-    <div class="stat" id="distance">0 m</div>
-    <div class="label">Distance</div>
+    <!-- Progress Ring -->
+    <div class="ring">
+        <div class="circle">
+            <span id="steps">0</span>
+            <small>steps</small>
+        </div>
+    </div>
 
-    <div class="stat" id="calories">0 kcal</div>
-    <div class="label">Calories Burned</div>
+    <!-- Stats -->
+    <div class="stats">
+        <div class="card">
+            <p id="distance">0 m</p>
+            <span>Distance</span>
+        </div>
+        <div class="card">
+            <p id="calories">0 kcal</p>
+            <span>Calories</span>
+        </div>
+    </div>
 
-    <button class="start-btn" onclick="start()">Start Tracking</button>
+    <button class="start-btn" onclick="start()">Start</button>
     <button class="reset-btn" onclick="reset()">Reset</button>
+
 </div>
 
 <script src="script.js"></script>
